@@ -51,12 +51,18 @@ describe "Authentication" do
 		describe "for non-signed-in users" do
 			let(:user) {FactoryGirl.create(:user)}
 
+			describe "when at the signin page and not signed in" do
+				before {visit signin_path}
+				it {should_not have_link('Profile', href: user_path(user))}
+				it {should_not have_link('Sign out', href: signout_path)}
+				it {should_not have_link('Settings', href: edit_user_path(user))}
+				it {should_not have_link('Users', href: users_path)}
+			end
+
 	      	describe "when attempting to visit a protected page" do
 	        before do
 	          visit edit_user_path(user)
-	          fill_in "Email",    with: user.email
-	          fill_in "Password", with: user.password
-	          click_button "Sign in"
+	          sign_in(user)
 	        end
 
 	        describe "after signing in" do
@@ -69,9 +75,7 @@ describe "Authentication" do
 	          	before do
 	          		click_link "Sign out"
 	          		click_link "Sign in"
-	          		fill_in "Email", with: user.email
-	          		fill_in "Password", with: user.password
-	          		click_button "Sign in"
+	          		sign_in(user)
 	          	end	
 
 	          	it "should render the default (profile) page" do
@@ -79,11 +83,18 @@ describe "Authentication" do
 	          	end
 	          end
 	        end
-	      end
 
+	        describe "when a signed in user tries to access signup" do
+	        	before do
+	        		sign_in(user)
+	        		visit(signup_path)
+	        	end
 
-
-
+	        	it "should render the root page" do
+	        		page.should have_selector('h1', text: "Welcome to the Sample App")
+	        	end
+	        end
+	    end
 
 			describe "in the Users controller" do
 				describe "visiting the edit page" do
@@ -129,6 +140,13 @@ describe "Authentication" do
 
 			describe "submitting a DELETE request to the Users#destroy action" do
 				before {delete user_path(user)}
+				specify {response.should redirect_to(root_path)}
+			end
+
+
+			describe "as admin user" do
+				let(:admin) {FactoryGirl.create(:admin)}
+				before {delete user_path(admin)}
 				specify {response.should redirect_to(root_path)}
 			end
 		end
