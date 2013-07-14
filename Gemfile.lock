@@ -1,3 +1,14 @@
+GIT
+  remote: git://github.com/ehowe/gamesdb.git
+  revision: 17f5f56bad9c9efdc217c3c6fecfdc870c5df4c5
+  specs:
+    gamesdb (1.0.4)
+      awesome_print
+      cistern
+      excon
+      nokogiri
+      rest-client
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -29,6 +40,7 @@ GEM
       i18n (= 0.6.1)
       multi_json (~> 1.0)
     arel (3.0.2)
+    awesome_print (1.1.0)
     bcrypt-ruby (3.0.1)
     bootstrap-sass (2.1.0.0)
     bootstrap-will_paginate (0.0.6)
@@ -43,6 +55,7 @@ GEM
       xpath (~> 0.1.4)
     childprocess (0.3.6)
       ffi (~> 1.0, >= 1.0.6)
+    cistern (0.2.2)
     coderay (1.0.9)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
@@ -63,6 +76,7 @@ GEM
     database_cleaner (0.7.0)
     diff-lcs (1.1.3)
     erubis (2.7.0)
+    excon (0.25.1)
     execjs (1.4.0)
       multi_json (~> 1.0)
     factory_girl (4.1.0)
@@ -136,6 +150,8 @@ GEM
     rake (10.0.4)
     rdoc (3.12.2)
       json (~> 1.4)
+    rest-client (1.6.7)
+      mime-types (>= 1.16)
     rspec (2.11.0)
       rspec-core (~> 2.11.0)
       rspec-expectations (~> 2.11.0)
@@ -197,9 +213,11 @@ DEPENDENCIES
   database_cleaner (= 0.7.0)
   factory_girl_rails (= 4.1.0)
   faker (= 1.0.1)
+  gamesdb!
   guard-rspec (= 1.2.1)
   guard-spork (= 1.2.0)
   jquery-rails (= 2.0.2)
+  nokogiri
   pg (= 0.12.2)
   rails (= 3.2.13)
   rspec-rails (= 2.11.0)

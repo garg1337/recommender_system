@@ -1,0 +1,68 @@
+<% provide(:title, @game.title)%>
+
+<style type="text/css">
+	img 
+	{
+		float: left;
+		margin-right: 1.9em;
+		position: relative;
+	}
+
+	li 
+	{
+		list-style-position: outside;
+		padding:0.2em;
+		vertical-align: middle;
+		list-style-type: none;
+
+	}
+	ul
+	{
+		padding-left: 1.2em;
+		margin-left: 400px;
+	}
+
+	.rating-form
+	{
+		padding-top: 1.2em;
+	}
+
+	.rating-form select 
+	{
+	   width: 300px;
+	   height: 40px;
+   	}
+
+
+
+</style>
+
+<div class = "row">
+		<section>
+
+			<h1>
+				<%= @game.title %>
+			</h1>
+
+			<h1>
+				<%= boxart_for @game %>
+			</h1>
+
+			<ul>
+				<li><b>Platform: </b><%= platform_for @game %></li>
+				<li><b>Release Date: </b><%= release_date_for @game %></li>
+				<li><b>Description: </b><%= description_for @game %></li>
+				<li><b>Genres: </b><%= genres_for @game %></li>
+				<li><b>Esrb rating: </b><%= rating_for @game %></li>
+				<li><b>Players: </b><%= players_for @game %></li>
+				<li><b>Co-op: </b><%= coop_for @game %></li>
+				<li><b>Publisher: </b><%= publisher_for @game %></li>
+				<li><b>Developer: </b><%= developer_for @game %></li>
+				<li><b>Metacritic Rating: </b> <%= metacritic_for @game %> </li>
+				<%= render 'shared/rating_form' %>
+			</ul>
+		</div>
+		</section>
+</div>
+
+

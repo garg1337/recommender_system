@@ -11,7 +11,32 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130624024639) do
+ActiveRecord::Schema.define(:version => 20130710041944) do
+
+  create_table "game_ratings", :force => true do |t|
+    t.integer  "rating"
+    t.integer  "user_id"
+    t.integer  "game_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "games", :force => true do |t|
+    t.string   "title"
+    t.string   "platform"
+    t.string   "release_date"
+    t.string   "description"
+    t.string   "esrb_rating"
+    t.string   "players"
+    t.string   "coop"
+    t.string   "publisher"
+    t.string   "developer"
+    t.string   "genres"
+    t.string   "metacritic_rating"
+    t.string   "image_url"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
 
   create_table "users", :force => true do |t|
     t.string   "name"
@@ -21,6 +46,7 @@ ActiveRecord::Schema.define(:version => 20130624024639) do
     t.string   "password_digest"
     t.string   "remember_token"
     t.boolean  "admin",           :default => false
+    t.string   "image_url"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

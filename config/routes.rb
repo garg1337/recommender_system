@@ -1,6 +1,10 @@
 SampleApp::Application.routes.draw do
+  get "games/new"
+
   resources :users
   resources :sessions, only: [:new, :create, :destroy]
+  resources :games, only: [:index, :show]
+  resources :game_ratings, only: [:create, :destroy, :update]
 
   root to: 'static_pages#home'
 
