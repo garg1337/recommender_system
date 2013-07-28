@@ -25,16 +25,21 @@
 
       normalized_game_ratings = Hash.new
 
-      game_ratings.each do |game_rating|
+      if(game_ratings.size == 1)
+        game_rating = game_ratings.first
+        normalized_game_ratings[game_rating.game.title] = [game_rating.game_id, 5]
+        return normalized_game_ratings
+      end
 
+      game_ratings.each do |game_rating|
         multiplier = ((game_rating.rating-min_rating)*(max_scale - min_scale))
         addition = multiplier / (max_rating - min_rating)
         normalized_game_ratings[game_rating.game.title] = [game_rating.game_id, min_scale +  addition]
       end
 
-      puts(normalized_game_ratings)
       return normalized_game_ratings
     end
+
 
 
     def generate_publisher_scoring_hash(normalized_ratings)
@@ -42,7 +47,6 @@
       normalized_ratings.each do |key, value|
         game = Game.find(value[0])
         publisher = game.publisher
-        puts(publisher)
         if publisher != nil
           if publisher_scoring_hash.has_key?(publisher)
             publisher_scoring_hash[publisher] += value[1]
@@ -52,7 +56,6 @@
         end
       end
 
-      puts(publisher_scoring_hash)
       return publisher_scoring_hash
     end
 
@@ -61,7 +64,6 @@
       normalized_ratings.each do |key, value|
         game = Game.find(value[0])
         developer = game.developer
-        puts(developer)
         if developer != nil
           if developer_scoring_hash.has_key?(developer)
             developer_scoring_hash[developer] += value[1]
@@ -71,7 +73,6 @@
         end
       end
 
-      puts(developer_scoring_hash)
       return developer_scoring_hash
     end
 
@@ -84,7 +85,6 @@
 
         if !genres.empty?
           genres.each do |genre|
-            puts(genre)
             if genre_scoring_hash.has_key?(genre)
               genre_scoring_hash[genre] += value[1]
             else
@@ -93,8 +93,6 @@
           end
         end
       end
-
-      puts(genre_scoring_hash)
       return genre_scoring_hash
     end
 
@@ -141,8 +139,6 @@
         end
       end
 
-      puts("done")
-
       game_scores = game_score_hash.sort_by {|k, v| v}
 
       game_scores = game_scores[game_scores.length-11...game_scores.length-1]
@@ -159,14 +155,111 @@
       game_scores.each do |game_score|
         title = Game.find(game_score[0]).title
         value = game_score[1]
-        puts("#{title}: #{value}")
       end
 
-
-
-
-      return nil
+      return game_scores
     end
+
+
+    def user_similarity(other)
+      sum = -1;
+      other_normalized_ratings = other.normalize_user_game_ratings
+      this_normalized_ratings = normalize_user_game_ratings
+
+      other_normalized_ratings.each do |key, value|
+        other_user_rating = value[1]
+        this_user_rating_pair = this_normalized_ratings[key]
+        if(!this_user_rating_pair.nil?)
+          this_user_rating = this_user_rating_pair[1]
+          diff = (this_user_rating - other_user_rating)
+          diff = diff * diff
+
+          if(sum == -1)
+            sum = 0.0
+          end
+
+          sum = sum + diff
+        end
+      end
+
+      if(sum == -1)
+        return 0
+      end
+      euclidean_distance = Math.sqrt(sum)
+      return (1.0)/(1.0 + euclidean_distance)
+    end
+
+    def user_similarities
+      users = User.all
+      sim_hash = Hash.new
+      users.each do |other_user|
+        if(other_user.id != id )
+          similarity = user_similarity(other_user)
+          if(similarity != 0)
+            sim_hash[other_user.id] = similarity
+          end
+        end
+      end
+
+      return sim_hash
+    end
+
+    def sim_score_games
+      similarities = user_similarities
+      user_ratings = normalize_user_game_ratings
+      similarity_score_hash = Hash.new
+
+      similarities.each do |key,value|
+        sim_score = value
+        other_user = User.find_by_id(key)
+        other_user_game_ratings = other_user.normalize_user_game_ratings
+        other_user_game_ratings.each do |key, value|
+          other_user_rating = value[1]
+          this_user_rating_pair = user_ratings[key]
+          if(this_user_rating_pair.nil?)
+            unrated_score = sim_score * other_user_rating
+            if(!similarity_score_hash.has_key?(value[0]))
+              similarity_score_hash[value[0]] = 0
+            end
+            similarity_score_hash[value[0]] += unrated_score
+          end
+        end
+      end
+      return similarity_score_hash
+    end
+
+
+    # def user_similarity(other)
+    #   other_games = other.games
+    #   sum = -1;
+
+    #   other_games.each do |other_game|
+    #     game_this_user = games.find_by_title(other_game.title)
+    #     if(!game_this_user.nil?)
+    #       this_user_rating = game_ratings.find_by_game_id(game_this_user.id).rating
+    #       other_user_rating = other.game_ratings.find_by_game_id(other_game.id).rating
+    #       diff = this_user_rating - other_user_rating
+    #       diff = diff * diff
+
+    #       if(sum == -1)
+    #         sum = 0.0
+    #       end
+
+    #       sum = sum + diff
+
+    #     end
+    #   end
+
+
+    #   if(sum == -1)
+    #     return 0
+    #   end
+
+    #   euclidean_distance = Math.sqrt(sum)
+    #   return euclidean_distance
+    # end
+
+
 
 
 
