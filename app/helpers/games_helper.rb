@@ -4,6 +4,10 @@ module GamesHelper
 		return image_tag(game.image_url, :size => "300x436", alt: game.title)
 	end
 
+	def mini_boxart_for(game)
+		return image_tag(game.image_url, :size => "60x70", alt: game.title)
+	end
+
 	def platform_for(game)
 		if game.platform == nil
 			return "N/A"

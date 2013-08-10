@@ -4,6 +4,9 @@
 	table{
 		table-layout: fixed;
 	}
+
+
+
 </style>
 
 <div class = "row">
@@ -31,6 +34,21 @@
 		<% end %>
 	</table>	
 
+
+
+
+<% if @user.name == @current_user.name &&  !@gen_recs %>
+
+<center>
+	<%= link_to "Generate Reccomendations", user_path(:gen_recs => true), class: "btn btn-large btn-primary" %>
+</center>
+
+<% else %>
+
+
+
+<% end %>
+	
 
 
 

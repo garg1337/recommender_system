@@ -22,6 +22,7 @@ class UsersController < ApplicationController
 
   def show
   	@user = User.find(params[:id])
+    @gen_recs = params[:gen_recs]
     @game_ratings = @user.game_ratings.paginate(page: params[:page])
   end
 

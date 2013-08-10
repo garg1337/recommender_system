@@ -1,0 +1,23 @@
+
+<h1> Games </h1>
+
+<table border="1" class = "table">
+	<tr>
+		<th>Boxart</th>
+		<th>Game</th>
+		<th>Platform</th>
+	</tr>
+
+
+
+	<% for game in @games %>
+
+	<tr>
+		<td> <%= mini_boxart_for game %> </td>
+		<td><%= link_to game.title, game_path(game) %></td>
+		<td> <%= game.platform %> </td>
+	</tr>
+			
+
+		<% end %>
+</table>

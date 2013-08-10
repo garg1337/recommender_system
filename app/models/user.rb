@@ -225,7 +225,27 @@
           end
         end
       end
-      return similarity_score_hash
+
+
+
+      similarity_scores = similarity_score_hash.sort_by {|k, v| v}
+
+      puts(similarity_scores.length)
+
+
+      if(similarity_scores.length > 10)
+        puts("more than ten")
+        similarity_scores = similarity_scores[similarity_scores.length-10...similarity_scores.length-1]
+      end
+
+      similarity_scores.sort!{|a,b| a[1] <=> b[1]}
+      similarity_scores.each do |similarity_score|
+        title = Game.find(similarity_score[0]).title
+        value = similarity_score[1]
+      end
+
+      return similarity_scores
+
     end
 
 
