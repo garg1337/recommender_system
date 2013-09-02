@@ -56,10 +56,6 @@ platforms = client.platforms.all
 
 	platforms.each do |platform| unless !(VIABLE_CONSOLE_LIST.include?(platform.name))
 		puts(platform.name)
-		if(!platform.name.include?("Sony") )
-			puts("skipping")
-			next
-		end
 		puts("in it")
 		platform_games_wrapper = client.get_platform_games(platform.id)
 		platform_games = platform_games_wrapper["Game"]
