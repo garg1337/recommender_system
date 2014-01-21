@@ -24,6 +24,12 @@ class UsersController < ApplicationController
   	@user = User.find(params[:id])
     @gen_recs = params[:gen_recs]
     @game_ratings = @user.game_ratings.paginate(page: params[:page])
+
+
+    if @gen_recs == 'true'
+      render :layout => false
+    end
+
   end
 
   def create

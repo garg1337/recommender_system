@@ -32,4 +32,4 @@ class GameRatingsController < ApplicationController
     end
   end
 
-end
+end 

@@ -1,0 +1,39 @@
+<table class = "table table-bordered">
+	<caption><h4> Your Recommendations</h4></caption>
+	<caption><h6> (If your recommendations seem misleading, try rating more games. 
+					The system gets more accurate the more games you rate.)
+	</h6></caption>
+		
+	<tr> <th>You might enjoy...</th> <th>Users similar to you also liked...</th> </tr>
+	<% @user_likes = @user.score_games %>
+	<% @sim_scores = @user.sim_score_games %>
+	<% @i = 0 %>
+	<% for @user_like in @user_likes %>
+		<tr>
+		<td><%= link_to Game.find(@user_like[0]).title, Game.find(@user_like[0])%></td>
+		<% if @i < @sim_scores.length %>
+			<%@sim_score = @sim_scores[@i]  %>
+			<td><%= link_to Game.find(@sim_score[0]).title, Game.find(@sim_score[0])%></td>
+			<% @i = @i + 1 %>
+		<% else %>
+			<td></td>
+		<% end %>
+		</tr>
+	<% end %>
+</table>	
+
+
+
+<div id="gen_recs_button">
+	<% if @user.name == @current_user.name &&  !@gen_recs %>
+		<center>
+			<%= link_to "Generate Reccomendations", user_path(:gen_recs => true), class: "btn btn-large btn-primary" %>
+		</center>
+</div>
+<% else %>
+<div id="gen_recs">
+	<div id="rec_table">
+		<%= render :partial => "recc_table" %>
+	</div>
+<% end %>
+</div>
