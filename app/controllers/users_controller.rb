@@ -28,8 +28,8 @@ class UsersController < ApplicationController
 
 
     if @gen_recs == 'true'
-      PygmentsWorker.perform_async(@user.id)
-
+      # PygmentsWorker.perform_async(@user.id)
+      ReccsWorker.new.async.perform(@user.id)
     end
     
   end

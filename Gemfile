@@ -11,6 +11,7 @@ gem 'nokogiri'
 gem 'gamesdb', :git => 'git://github.com/ehowe/gamesdb.git'
 gem 'delayed_job_active_record'
 gem 'sidekiq'
+gem 'sucker_punch', '~> 1.0.1'
 
 group :development, :test do
   gem 'sqlite3', '1.3.5'
