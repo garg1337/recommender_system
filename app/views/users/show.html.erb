@@ -1,58 +1,5 @@
 <% provide(:title, @user.name)%>
 
-
-<%if @gen_recs == 'true' %>
-
-
-<table class = "table table-bordered">
-	<caption><h4> Your Recommendations</h4></caption>
-	<caption><h6> (If your recommendations seem misleading, try rating more games. 
-					The system gets more accurate the more games you rate.)
-	</h6></caption>
-		
-	<tr> <th>You might enjoy...</th> <th>Users similar to you also liked...</th> </tr>
-	<% @user_likes = @user.score_games %>
-	<% @sim_scores = @user.sim_score_games %>
-	<% @i = 0 %>
-	<% for @user_like in @user_likes %>
-		<tr>
-		<td><%= link_to Game.find(@user_like[0]).title, Game.find(@user_like[0])%></td>
-		<% if @i < @sim_scores.length %>
-			<%@sim_score = @sim_scores[@i]  %>
-			<td><%= link_to Game.find(@sim_score[0]).title, Game.find(@sim_score[0])%></td>
-			<% @i = @i + 1 %>
-		<% else %>
-			<td></td>
-		<% end %>
-		</tr>
-	<% end %>
-</table>	
-
-
-
-
-<%else%>
-
-
-<script>
-$(document).ready(function(){ 
-	var pathname= window.location.pathname;
-
-	var retrieve_recc = function(){
-		$.ajax({
-			url: "/users/1?gen_recs=true",
-			success: function(data,a,r){
-				
-			}
-		}).done(function(data){$("#rec_table").html(data);});
-	}
-
-	$("#rec_btn").click(function(){retrieve_recc();});
-});
-
-</script>
-
-
 <style type = "text/css">
 	table{
 		table-layout: fixed;
@@ -87,26 +34,17 @@ $(document).ready(function(){
 		<% end %>
 	</table>	
 
-		<% if @user.name == @current_user.name  %>
-			<center>
-				<button id="rec_btn" class="btn btn-large primary">
-			</center>
-		</div>
-		<div id="gen_recs">
-			<div id="rec_table">
-				
-			</div>
-		<% end %>
-		</div>
 
 
 
+<% if @user.name == @current_user.name &&  !@gen_recs %>
 
-	<%end%>
+	<center>
+		<%= link_to "Generate Reccomendations", user_path(:gen_recs => true), class: "btn btn-large btn-primary" %>
+	</center>
 
-
-
-
-
-
-
+<% else %>
+	<h1> <%= @user.reccommendation.id %> </h1>
+	<h1> <%= @user.reccommendation.reccs %> </h1>
+<% end %>
+	

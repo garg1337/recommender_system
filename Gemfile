@@ -9,6 +9,8 @@ gem 'bootstrap-will_paginate', '0.0.6'
 gem 'jquery-rails', '2.0.2'
 gem 'nokogiri'
 gem 'gamesdb', :git => 'git://github.com/ehowe/gamesdb.git'
+gem 'delayed_job_active_record'
+gem 'sidekiq'
 
 group :development, :test do
   gem 'sqlite3', '1.3.5'

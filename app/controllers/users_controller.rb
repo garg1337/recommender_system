@@ -17,30 +17,35 @@ class UsersController < ApplicationController
   end
 
   def new
-  	@user = User.new
+    @user = User.new
   end
 
   def show
-  	@user = User.find(params[:id])
+    @user = User.find(params[:id])
     @gen_recs = params[:gen_recs]
     @game_ratings = @user.game_ratings.paginate(page: params[:page])
 
 
-    if @gen_recs == 'true'
-      render :layout => false
-    end
 
+    if @gen_recs == 'true'
+      PygmentsWorker.perform_async(@user.id)
+
+    end
+    
   end
 
   def create
-  	@user = User.new(params[:user])
-  	if @user.save
+    @user = User.new(params[:user])
+
+    @reccomendation = @user.create_reccommendation()
+
+    if @user.save
       sign_in @user
-  	  flash[:success] = "Welcome to the Sample App!"
-  		redirect_to @user
-  	else
-  		render 'new'
-  	end
+      flash[:success] = "Welcome to the Sample App!"
+      redirect_to @user
+    else
+      render 'new'
+    end
   end
 
   def edit
@@ -48,6 +53,8 @@ class UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
+    # @reccomendation = @user.create_reccommendation()
+
     if @user.update_attributes(params[:user])
       sign_in @user
       flash[:success] = "Profile Updated"

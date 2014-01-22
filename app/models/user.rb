@@ -3,8 +3,10 @@
   has_secure_password
   has_many :game_ratings, dependent: :destroy
   has_many :games, :through => :game_ratings
+  has_one :reccommendation
   before_save { email.downcase! }
   before_save :create_remember_token
+
 
 
   validates :name, presence: true, length: { maximum: 50}

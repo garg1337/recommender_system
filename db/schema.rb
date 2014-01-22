@@ -11,7 +11,23 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130710041944) do
+ActiveRecord::Schema.define(:version => 20140122135223) do
+
+  create_table "delayed_jobs", :force => true do |t|
+    t.integer  "priority",   :default => 0, :null => false
+    t.integer  "attempts",   :default => 0, :null => false
+    t.text     "handler",                   :null => false
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
+  end
+
+  add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
 
   create_table "game_ratings", :force => true do |t|
     t.integer  "rating"
@@ -25,7 +41,7 @@ ActiveRecord::Schema.define(:version => 20130710041944) do
     t.string   "title"
     t.string   "platform"
     t.string   "release_date"
-    t.string   "description"
+    t.text     "description"
     t.string   "esrb_rating"
     t.string   "players"
     t.string   "coop"
@@ -34,8 +50,16 @@ ActiveRecord::Schema.define(:version => 20130710041944) do
     t.string   "genres"
     t.string   "metacritic_rating"
     t.string   "image_url"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "reccommendations", :force => true do |t|
+    t.integer  "user_id"
+    t.text     "reccs"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+    t.integer  "reccommendation_id"
   end
 
   create_table "users", :force => true do |t|
