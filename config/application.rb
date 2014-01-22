@@ -10,9 +10,6 @@ require "sprockets/railtie"
 
 
 
-# config/application.rb
-config.assets.initialize_on_precompile = false
-
 
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
